@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|ARM">
@@ -35,10 +35,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <RootNamespace>MobilePlatformSpecific</RootNamespace>
+    <RootNamespace>OpenGLES</RootNamespace>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <ProjectVersion>1.0</ProjectVersion>
-    <ProjectGuid>{3e8be78d-b535-48c9-b009-f2950d9f777b}</ProjectGuid>
+    <ProjectGuid>{20486526-51b3-4124-8eb0-284537eb82a3}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(AndroidTargetsPath)\Android.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
@@ -125,8 +125,8 @@
     <AntProjectPropertiesFile Include="project.properties" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MobilePlatformSpecific.NativeActivity\MobilePlatformSpecific.NativeActivity.vcxproj">
-      <Project>{28b08dc3-8cea-48be-9518-6a793831ad4a}</Project>
+    <ProjectReference Include="..\OpenGLES.Android.NativeActivity\OpenGLES.Android.NativeActivity.vcxproj">
+      <Project>{90b9606b-a037-4ffc-aec9-ed3ef811b139}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(AndroidTargetsPath)\Android.targets" />

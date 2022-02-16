@@ -15,7 +15,9 @@
 *
 */
 
+#include "Cube.h"
 #include <malloc.h>
+#include "Sphere.h"
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "AndroidProject1.NativeActivity", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "AndroidProject1.NativeActivity", __VA_ARGS__))
@@ -108,10 +110,7 @@ static int engine_init_display(struct engine* engine) {
 	engine->state.angle = 0;
 
 	// Initialize GL state.
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-	glEnable(GL_CULL_FACE);
-	glShadeModel(GL_SMOOTH);
-	glDisable(GL_DEPTH_TEST);
+	Sphere_setupGL(w, h);
 
 	return 0;
 }
@@ -119,19 +118,24 @@ static int engine_init_display(struct engine* engine) {
 /**
 * Just the current frame in the display.
 */
+
 static void engine_draw_frame(struct engine* engine) {
 	if (engine->display == NULL) {
 		// No display.
 		return;
 	}
 
-	// Just fill the screen with a color.
-	glClearColor(((float)engine->state.x) / engine->width, engine->state.angle,
-		((float)engine->state.y) / engine->height, 1);
-	glClear(GL_COLOR_BUFFER_BIT);
+	Sphere_prepare();
+	Cube_prepare();
+
+	Cube_draw();
+
+	//Sphere_draw();
+
 
 	eglSwapBuffers(engine->display, engine->surface);
 }
+
 
 /**
 * Tear down the EGL context currently associated with the display.
@@ -151,6 +155,8 @@ static void engine_term_display(struct engine* engine) {
 	engine->display = EGL_NO_DISPLAY;
 	engine->context = EGL_NO_CONTEXT;
 	engine->surface = EGL_NO_SURFACE;
+
+	Cube_tearDownGL();
 }
 
 /**
@@ -282,10 +288,11 @@ void android_main(struct android_app* state) {
 
 		if (engine.animating) {
 			// Done with events; draw next animation frame.
-			engine.state.angle += .01f;
-			if (engine.state.angle > 1) {
-				engine.state.angle = 0;
-			}
+			Sphere_update();
+			Cube_update();
+			//if (engine.state.angle > 1) {
+			//	engine.state.angle = 0;
+			//}
 
 			// Drawing is throttled to the screen update rate, so there
 			// is no need to do timing here.

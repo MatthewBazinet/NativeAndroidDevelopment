@@ -30,8 +30,8 @@
         <isset property="env.ANDROID_HOME" />
     </condition>
 
-    <!-- The project.properties file contains project specific properties such as 
-         project target, and library dependencies. Lower level build properties are 
+    <!-- The project.properties file contains project specific properties such as
+         project target, and library dependencies. Lower level build properties are
          stored in ant.properties
 
          This file is an integral part of the build system for your
