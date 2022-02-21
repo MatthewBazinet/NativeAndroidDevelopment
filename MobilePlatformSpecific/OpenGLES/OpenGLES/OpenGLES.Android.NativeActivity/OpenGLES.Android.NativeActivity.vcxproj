@@ -211,6 +211,18 @@
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="x86\Assets\Dice.txt">
+      <DeploymentContent>false</DeploymentContent>
+      <FileType>Document</FileType>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="x86\Assets\Dice.mtl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="x86\Assets\diceTexture.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

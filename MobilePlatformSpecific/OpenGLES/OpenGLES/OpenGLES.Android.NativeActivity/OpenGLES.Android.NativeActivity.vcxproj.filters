@@ -8,4 +8,13 @@
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="x86\Assets\Dice.mtl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="x86\Assets\diceTexture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="x86\Assets\Dice.txt" />
+  </ItemGroup>
 </Project>

@@ -15,10 +15,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Cube.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)OBJLoader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Cube.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)OBJLoader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Sphere.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)VMath.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Application.mk" />
   </ItemGroup>
 </Project>

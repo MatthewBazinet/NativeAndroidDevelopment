@@ -15,9 +15,10 @@
 *
 */
 
-#include "Cube.h"
+//#include "Cube.h"
 #include <malloc.h>
-#include "Sphere.h"
+//#include "Sphere.h"
+#include "OBJLoader.h"
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "AndroidProject1.NativeActivity", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "AndroidProject1.NativeActivity", __VA_ARGS__))
@@ -77,7 +78,7 @@ static int engine_init_display(struct engine* engine) {
 	EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 
 	eglInitialize(display, 0, 0);
-
+	
 	/* Here, the application chooses the configuration it desires. In this
 	* sample, we have a very simplified selection process, where we pick
 	* the first EGLConfig that matches our criteria */
@@ -110,8 +111,9 @@ static int engine_init_display(struct engine* engine) {
 	engine->state.angle = 0;
 
 	// Initialize GL state.
-	Sphere_setupGL(w, h);
-
+	//Sphere_setupGL(w, h);
+	SetupOBJ(w, h);
+	LoadObj("./Assets/Dice.txt");
 	return 0;
 }
 
@@ -125,10 +127,11 @@ static void engine_draw_frame(struct engine* engine) {
 		return;
 	}
 
-	Sphere_prepare();
-	Cube_prepare();
-
-	Cube_draw();
+	//Sphere_prepare();
+	//Cube_prepare();
+	PrepareObj();
+	Draw();
+	//Cube_draw();
 
 	//Sphere_draw();
 
@@ -156,7 +159,7 @@ static void engine_term_display(struct engine* engine) {
 	engine->context = EGL_NO_CONTEXT;
 	engine->surface = EGL_NO_SURFACE;
 
-	Cube_tearDownGL();
+	//Cube_tearDownGL();
 }
 
 /**
@@ -288,10 +291,10 @@ void android_main(struct android_app* state) {
 
 		if (engine.animating) {
 			// Done with events; draw next animation frame.
-			Sphere_update();
-			Cube_update();
+			//Sphere_update();
+			//Cube_update();
 			//if (engine.state.angle > 1) {
-			//	engine.state.angle = 0;
+			//engine.state.angle = 0;
 			//}
 
 			// Drawing is throttled to the screen update rate, so there
