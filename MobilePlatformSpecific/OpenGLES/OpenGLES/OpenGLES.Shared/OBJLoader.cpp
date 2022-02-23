@@ -77,7 +77,7 @@ void LoadObj(const char* objFilePath_)
 		{
 			if (vertexIndices.size() > 0 && uvIndices.size() > 0 && normalIndices.size() > 0)
 			{
-				//Postprocessing();
+				Postprocessing();
 			}
 			//LoadMaterial(line.substr(7));
 		}
