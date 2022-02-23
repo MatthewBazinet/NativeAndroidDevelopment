@@ -7,6 +7,7 @@ std::vector< vec3 > temp_vertices;
 std::vector< vec3 > out_vertices;
 std::vector< vec2 > temp_uvs, out_uvs;
 std::vector< vec3 > temp_normals, out_normals;
+static AAssetManager* asset_manager;
 
 void LoadObj(const char* objFilePath_)
 {
@@ -126,6 +127,22 @@ void Postprocessing()
 		vec3 normal = temp_normals[normalIndex - 1];
 		out_normals.push_back(normal);
 	}
+}
+
+FileData get_file_data(const char* path)
+{
+	assert(path != NULL);
+	AAsset* asset = AAssetManager_open(asset_manager, path, AASSET_MODE_STREAMING);
+	assert(asset != NULL);
+
+	return (FileData) { AAsset_getLength(asset), AAsset_getBuffer(asset), asset };
+}
+
+void release_file_data(const FileData* file_data)
+{
+	assert(file_data != NULL);
+	assert(file_data->file_handle != NULL);
+	AAsset_close((AAsset*)file_data->file_handle);
 }
 
 void SetupOBJ(double width, double height)

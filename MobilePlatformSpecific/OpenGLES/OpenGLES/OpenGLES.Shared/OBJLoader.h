@@ -10,6 +10,7 @@
 #include <GLES/gl.h>
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
+#include <assert.h>
 
 #elif __APPLE__
 #include <OpenGLES/ES1/gl.h>
@@ -24,5 +25,12 @@ void Update();
 void Draw();
 void Postprocessing();
 
+struct FileData {
+    const long data_length;
+    const void* data;
+    const void* file_handle;
+};
 
+FileData get_file_data(const char* path);
+void release_file_data(const FileData* file_data);
 
