@@ -18,7 +18,7 @@
 //#include "Cube.h"
 #include <malloc.h>
 //#include "Sphere.h"
-#include "OBJLoader.h"
+//#include "OBJLoader.h"
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "AndroidProject1.NativeActivity", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "AndroidProject1.NativeActivity", __VA_ARGS__))
@@ -112,8 +112,8 @@ static int engine_init_display(struct engine* engine) {
 
 	// Initialize GL state.
 	//Sphere_setupGL(w, h);
-	SetupOBJ(w, h);
-	LoadObj("./Assets/Dice.txt");
+	//SetupOBJ(w, h);
+	//LoadObj("../Assets/Dice.txt");
 	return 0;
 }
 
@@ -129,8 +129,8 @@ static void engine_draw_frame(struct engine* engine) {
 
 	//Sphere_prepare();
 	//Cube_prepare();
-	PrepareObj();
-	Draw();
+	//Draw();
+	//on_draw_frame();
 	//Cube_draw();
 
 	//Sphere_draw();

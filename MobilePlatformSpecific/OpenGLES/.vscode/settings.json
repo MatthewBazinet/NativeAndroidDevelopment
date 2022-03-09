@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "OpenGLES/OpenGLES.Android.NativeActivity/android-1.0.2-jar-with-dependencies.jar"
+    ]
+}

@@ -4,14 +4,31 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Cube.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)OBJLoader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Sphere.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)platform_asset_utils.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)platform_file_utils.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jni.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)buffer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)shader.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)asset_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Cube.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)OBJLoader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Sphere.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)VMath.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)platform_file_utils.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)platform_asset_utils.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)glwrapper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)buffer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)shader.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)platform_log.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)platform_macros.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)asset_utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Application.mk" />
+    <None Include="$(MSBuildThisFileDirectory)GameLibJNIWrapper.java" />
+    <None Include="$(MSBuildThisFileDirectory)RendererWrapper.java" />
+    <None Include="$(MSBuildThisFileDirectory)Android.mk" />
   </ItemGroup>
 </Project>

@@ -1,88 +1,102 @@
 #include "OBJLoader.h"
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "AndroidProject1.NativeActivity", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "AndroidProject1.NativeActivity", __VA_ARGS__))
+#include "asset_utils.h"
+#include "buffer.h"
+#include "glwrapper.h"
+#include "platform_asset_utils.h"
+#include "shader.h"
+
+static GLuint texture;
+static GLuint buffer;
+static GLuint program;
+
+static GLint a_position_location;
+static GLint a_texture_coordinates_location;
+static GLint u_texture_unit_location;
+
+// position X, Y, texture S, T
+static const float rect[] = { -1.0f, -1.0f, 0.0f, 0.0f,
+							 -1.0f,  1.0f, 0.0f, 1.0f,
+							  1.0f, -1.0f, 1.0f, 0.0f,
+							  1.0f,  1.0f, 1.0f, 1.0f };
 
 std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
 std::vector< vec3 > temp_vertices;
 std::vector< vec3 > out_vertices;
 std::vector< vec2 > temp_uvs, out_uvs;
 std::vector< vec3 > temp_normals, out_normals;
+//FileData file;
 static AAssetManager* asset_manager;
 
 void LoadObj(const char* objFilePath_)
 {
-	FILE* file = NULL;
-	errno = 0;
-	int i = errno;
-	file = fopen(objFilePath_, "r+");
-	i = errno;
-	if (errno != 0) {
-		LOGW("ERRNO %i", errno);
-		return;
-	}
-	//currentMaterial = Material();
+
+	const FileData file = get_asset_data(objFilePath_);
+	
+
+	//currentmaterial = material();
 
 	while (1)
 	{
-		char lineHeader[128];
-		// read the first word of the line
-		int res = fscanf(file, "%s", lineHeader);
-		if (res == EOF)
+		char lineheader[128];
+		 //read the first word of the line
+		int res = fscanf(file, "%s", lineheader);
+		if (res == eof)
 			break;
-		//VERTEX DATA
-		if (strcmp(lineHeader, "v") == 0) {
+		vertex data
+		if (strcmp(lineheader, "v") == 0) {
 			vec3 vertex;
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
 			temp_vertices.push_back(vertex);
 		}
 
-		//NORMAL DATA
-		else if (strcmp(lineHeader, "vn") == 0)
+		normal data
+		else if (strcmp(lineheader, "vn") == 0)
 		{
 			vec3 normal;
 			fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
 			temp_normals.push_back(normal);
 		}
 
-		//TEXTURE COORDINATES
-		else if (strcmp(lineHeader, "vt") == 0)
+		texture coordinates
+		else if (strcmp(lineheader, "vt") == 0)
 		{
-			vec2 textCoords;
-			fscanf(file, "%f %f %f\n", &textCoords.x, &textCoords.y);
-			temp_uvs.push_back(textCoords);
+			vec2 textcoords;
+			fscanf(file, "%f %f %f\n", &textcoords.x, &textcoords.y);
+			temp_uvs.push_back(textcoords);
 		}
-		//FACE DATA
-		else if (strcmp(lineHeader, "f") == 0)
+		face data
+		else if (strcmp(lineheader, "f") == 0)
 		{
 			std::string vertex1, vertex2, vertex3;
-			unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+			unsigned int vertexindex[3], uvindex[3], normalindex[3];
+			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexindex[0], &uvindex[0], &normalindex[0], &vertexindex[1], &uvindex[1], &normalindex[1], &vertexindex[2], &uvindex[2], &normalindex[2]);
 			if (matches != 9) {
-				printf("File can't be read by our simple parser : ( Try exporting with other options\n");
+				printf("file can't be read by our simple parser : ( try exporting with other options\n");
 				return;
 			}
-			vertexIndices.push_back(vertexIndex[0]);
-			vertexIndices.push_back(vertexIndex[1]);
-			vertexIndices.push_back(vertexIndex[2]);
-			uvIndices.push_back(uvIndex[0]);
-			uvIndices.push_back(uvIndex[1]);
-			uvIndices.push_back(uvIndex[2]);
-			normalIndices.push_back(normalIndex[0]);
-			normalIndices.push_back(normalIndex[1]);
-			normalIndices.push_back(normalIndex[2]);
+			vertexindices.push_back(vertexindex[0]);
+			vertexindices.push_back(vertexindex[1]);
+			vertexindices.push_back(vertexindex[2]);
+			uvindices.push_back(uvindex[0]);
+			uvindices.push_back(uvindex[1]);
+			uvindices.push_back(uvindex[2]);
+			normalindices.push_back(normalindex[0]);
+			normalindices.push_back(normalindex[1]);
+			normalindices.push_back(normalindex[2]);
 		}
 
-		//NEW MESH
-		else if (strcmp(lineHeader, "usemtl") == 0)
+		new mesh
+		else if (strcmp(lineheader, "usemtl") == 0)
 		{
-			if (vertexIndices.size() > 0 && uvIndices.size() > 0 && normalIndices.size() > 0)
+			if (vertexindices.size() > 0 && uvindices.size() > 0 && normalindices.size() > 0)
 			{
-				//Postprocessing();
+				postprocessing();
 			}
-			//LoadMaterial(line.substr(7));
+			loadmaterial(line.substr(7));
 		}
 	}
-	fclose(file);
 }
 
 void PrepareObj()
@@ -129,21 +143,7 @@ void Postprocessing()
 	}
 }
 
-FileData get_file_data(const char* path)
-{
-	assert(path != NULL);
-	AAsset* asset = AAssetManager_open(asset_manager, path, AASSET_MODE_STREAMING);
-	assert(asset != NULL);
 
-	return (FileData) { AAsset_getLength(asset), AAsset_getBuffer(asset), asset };
-}
-
-void release_file_data(const FileData* file_data)
-{
-	assert(file_data != NULL);
-	assert(file_data->file_handle != NULL);
-	AAsset_close((AAsset*)file_data->file_handle);
-}
 
 void SetupOBJ(double width, double height)
 {
@@ -159,4 +159,29 @@ void SetupOBJ(double width, double height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glFrustumf(-ratio, ratio, -1, 1, 1, 10);
+}
+
+void on_surface_created() {
+	glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
+}
+
+void on_surface_changed() {
+	buffer = create_vbo(sizeof(rect), rect, GL_STATIC_DRAW);
+	program = build_program_from_assets("shaders/shader.vsh", "shaders/shader.fsh");
+	a_position_location = glGetAttribLocation(program, "a_Position");
+}
+
+void on_draw_frame() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glUseProgram(program);
+	glUniform1i(u_texture_unit_location, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	glVertexAttribPointer(a_position_location, 2, GL_FLOAT, GL_FALSE,
+		4 * sizeof(GL_FLOAT), BUFFER_OFFSET(0));
+	glVertexAttribPointer(a_texture_coordinates_location, 2, GL_FLOAT, GL_FALSE,
+		4 * sizeof(GL_FLOAT), BUFFER_OFFSET(2 * sizeof(GL_FLOAT)));
+	glEnableVertexAttribArray(a_position_location);
+	glEnableVertexAttribArray(a_texture_coordinates_location);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

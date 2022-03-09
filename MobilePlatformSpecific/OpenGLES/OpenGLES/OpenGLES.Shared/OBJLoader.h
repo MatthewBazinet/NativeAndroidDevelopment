@@ -5,19 +5,21 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-
+#include "asset_utils.h"
+#include "buffer.h"
+#include "glwrapper.h"
+#include "shader.h"
 #ifdef __ANDROID__
 #include <GLES/gl.h>
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
 #include <assert.h>
-
+#include "platform_file_utils.h"
+#include "platform_asset_utils.h"
 #elif __APPLE__
 #include <OpenGLES/ES1/gl.h>
 #endif
 
-//using namespace std;
-using namespace std;
 void SetupOBJ(double width, double height);
 void LoadObj(const char* objFilePath_);
 void PrepareObj();
@@ -25,12 +27,7 @@ void Update();
 void Draw();
 void Postprocessing();
 
-struct FileData {
-    const long data_length;
-    const void* data;
-    const void* file_handle;
-};
-
-FileData get_file_data(const char* path);
-void release_file_data(const FileData* file_data);
+void on_surface_created();
+void on_surface_changed();
+void on_draw_frame();
 

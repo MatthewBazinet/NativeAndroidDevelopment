@@ -218,6 +218,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Application.mk" />
     <None Include="x86\Assets\Dice.mtl" />
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="x86\Assets\Dice.mtl" />
+    <None Include="Application.mk" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="x86\Assets\diceTexture.png" />
