@@ -40,7 +40,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)VMath.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Android.mk" />
     <None Include="$(MSBuildThisFileDirectory)GameLibJNIWrapper.java" />
     <None Include="$(MSBuildThisFileDirectory)RendererWrapper.java" />
   </ItemGroup>
