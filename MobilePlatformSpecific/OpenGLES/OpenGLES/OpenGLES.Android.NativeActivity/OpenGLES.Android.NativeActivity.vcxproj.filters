@@ -11,6 +11,7 @@
   <ItemGroup>
     <None Include="x86\Assets\Dice.mtl" />
     <None Include="Application.mk" />
+    <None Include="android-1.0.2-jar-with-dependencies.jar" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="x86\Assets\diceTexture.png" />

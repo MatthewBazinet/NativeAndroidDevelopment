@@ -29,5 +29,6 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)GameLibJNIWrapper.java" />
     <None Include="$(MSBuildThisFileDirectory)RendererWrapper.java" />
+    <None Include="$(MSBuildThisFileDirectory)PlatformFileUtils.java" />
   </ItemGroup>
 </Project>
