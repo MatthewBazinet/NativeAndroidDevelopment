@@ -29,10 +29,10 @@ std::vector< vec3 > temp_normals, out_normals;
 //FileData file;
 static AAssetManager* asset_manager;
 
-void LoadObj(const char* objFilePath_)
+void LoadObj(const char* objFilePath_, AAssetManager* assetManager)
 {
 
-	const FileData file = get_asset_data(objFilePath_);
+	const FileData file = get_asset_data(objFilePath_, assetManager);
 	
 
 	//currentmaterial = material();
@@ -167,7 +167,7 @@ void on_surface_created() {
 
 void on_surface_changed() {
 	buffer = create_vbo(sizeof(rect), rect, GL_STATIC_DRAW);
-	program = build_program_from_assets("shaders/shader.vsh", "shaders/shader.fsh");
+	//program = build_program_from_assets("shaders/shader.vsh", "shaders/shader.fsh");
 	//a_position_location = glGetAttribLocation(program, "a_Position");
 }
 

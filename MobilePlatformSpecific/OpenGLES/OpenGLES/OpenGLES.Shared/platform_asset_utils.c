@@ -10,10 +10,9 @@ JNIEXPORT void JNICALL Java_GameLibJNIWrapper_init_1asset_1manager(
     asset_manager = AAssetManager_fromJava(env, java_asset_manager);
 }
 
-FileData get_asset_data(const char* relative_path) {
+FileData get_asset_data(const char* relative_path, AAssetManager* assetManager) {
     assert(relative_path != NULL);
-    AAsset* asset =
-        AAssetManager_open(asset_manager, relative_path, AASSET_MODE_STREAMING);
+    AAsset* asset = AAssetManager_open(assetManager, relative_path, AASSET_MODE_BUFFER);
     assert(asset != NULL);
 
     return (FileData) { AAsset_getLength(asset), AAsset_getBuffer(asset), asset };

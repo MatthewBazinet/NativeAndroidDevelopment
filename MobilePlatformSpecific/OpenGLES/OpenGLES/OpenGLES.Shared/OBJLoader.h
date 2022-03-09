@@ -21,7 +21,7 @@
 #endif
 
 void SetupOBJ(double width, double height);
-void LoadObj(const char* objFilePath_);
+void LoadObj(const char* objFilePath_, AAssetManager* assetManager);
 void PrepareObj();
 void Update();
 void Draw();
