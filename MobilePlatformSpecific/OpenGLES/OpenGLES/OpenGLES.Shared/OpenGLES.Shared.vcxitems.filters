@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Cube.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)OBJLoader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Sphere.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)platform_asset_utils.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)platform_file_utils.c" />
@@ -13,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Cube.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)OBJLoader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Sphere.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)VMath.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)platform_file_utils.h" />

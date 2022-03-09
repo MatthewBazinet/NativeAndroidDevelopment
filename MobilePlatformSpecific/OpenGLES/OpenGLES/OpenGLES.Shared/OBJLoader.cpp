@@ -92,7 +92,11 @@ void LoadObj(const char* objFilePath_)
 		{
 			if (vertexindices.size() > 0 && uvindices.size() > 0 && normalindices.size() > 0)
 			{
+<<<<<<< HEAD
 				postprocessing();
+=======
+				Postprocessing();
+>>>>>>> 8e676f7fb178fc2ff87651500d1df6d1004cbc13
 			}
 			loadmaterial(line.substr(7));
 		}
