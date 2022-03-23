@@ -112,7 +112,7 @@ static int engine_init_display(struct engine* engine) {
 
 	// Initialize GL state.
 	//Sphere_setupGL(w, h);
-	//SetupOBJ(w, h);
+	SetupOBJ(w, h);
 
 	LoadObj("Dice.txt", engine->app->activity->assetManager);
 	return 0;
@@ -130,7 +130,7 @@ static void engine_draw_frame(struct engine* engine) {
 
 	//Sphere_prepare();
 	//Cube_prepare();
-	//Draw();
+	Draw();
 	//on_draw_frame();
 	//Cube_draw();
 

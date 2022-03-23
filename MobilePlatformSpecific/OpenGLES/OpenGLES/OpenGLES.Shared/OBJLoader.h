@@ -25,7 +25,7 @@ void LoadObj(const char* objFilePath_, AAssetManager* assetManager);
 void PrepareObj();
 void Update();
 void Draw();
-void Postprocessing();
+void PostProcessing();
 
 void on_surface_created();
 void on_surface_changed();

@@ -48,20 +48,21 @@ void LoadObj(const char* objFilePath_, AAssetManager* assetManager)
 		if (line.substr(0, 2) == "v ") {
 			std::string v(line.substr(2));
 			std::string vertexData;
-			std::vector<std::string> points;
 			float x, y, z;
-			while (v.find(' ') != std::string::npos) {
+			for (int i = 0; i < 3; i++) {
 				vertexData = v.substr(0, v.find(' '));
 				v = v.substr(v.find(' ') + 1);
-				points.push_back(v);
-				if (points.size() == 3) {
-					x = atof(points[0].c_str());
-					y = atof(points[1].c_str());
-					z = atof(points[2].c_str());
-					temp_vertices.push_back(vec3(x, y, z));
-					points.clear();
+				if (i == 0) {
+					x = atof(vertexData.c_str());
+				}
+				if (i == 1) {
+					y = atof(vertexData.c_str());
+				}
+				if (i == 2) {
+					z = atof(vertexData.c_str());
 				}
 			}
+				temp_vertices.push_back(vec3(x, y, z));
 		}
 
 		//NORMAL DATA
@@ -69,84 +70,134 @@ void LoadObj(const char* objFilePath_, AAssetManager* assetManager)
 		{
 			std::string n(line.substr(3));
 			std::string normalData;
-			std::vector<std::string> points;
 			float x, y, z;
-			while (n.find(' ') != std::string::npos) {
+			for (int i = 0; i < 3; i++) {
 				normalData = n.substr(0, n.find(' '));
 				n = n.substr(n.find(' ') + 1);
-				points.push_back(n);
-				if (points.size() == 3) {
-					x = atof(points[0].c_str());
-					y = atof(points[1].c_str());
-					z = atof(points[2].c_str());
-					temp_normals.push_back(vec3(x, y, z));
-					points.clear();
+				if (i == 0) {
+					x = atof(normalData.c_str());
+				}
+				if (i == 1) {
+					y = atof(normalData.c_str());
+				}
+				if (i == 2) {
+					z = atof(normalData.c_str());
 				}
 			}
+			temp_normals.push_back(vec3(x, y, z));
 		}
 		//TEXTURE COORDINATES
 		else if (line.substr(0, 3) == "vt ")
 		{
 			std::string t(line.substr(3));
 			std::string textureCoord;
-			std::vector<std::string> points;
 			float x, y, z;
-			while (t.find(' ') != std::string::npos) {
+			for (int i = 0; i < 3; i++) {
 				textureCoord = t.substr(0, t.find(' '));
 				t = t.substr(t.find(' ') + 1);
-				points.push_back(t);
-				if (points.size() == 3) {
-					x = atof(points[0].c_str());
-					y = atof(points[1].c_str());
-					z = atof(points[2].c_str());
-					temp_uvs.push_back(vec2(x, y));
-					points.clear();
+				if (i == 0) {
+					x = atof(textureCoord.c_str());
+				}
+				if (i == 1) {
+					y = atof(textureCoord.c_str());
+				}
+				if (i == 2) {
+					z = atof(textureCoord.c_str());
 				}
 			}
+			temp_uvs.push_back(vec2(x, y));
 		}
 		//FACE DATA
 		else if (line.substr(0, 2) == "f ")
 		{
-			std::string vn(line.substr(2));
+			std::string f(line.substr(2));
 			std::string faceData;
-			//unsigned int a, b, c, aT, bT, cT, aN, bN, cN;
+			std::string indicesData, normIndicesData, textIndicesData;
+			unsigned int a, b, c, aT, bT, cT, aN, bN, cN;
 
-			//vn >> a >> dummy >> aT >> dummy >> aN >> b >> dummy >> bT >> dummy >> bN
-			//	>> c >> dummy >> cT >> dummy >> cN;
-			//while (vn.find(' ') != std::string::npos) {
-			//	faceData = vn.substr(0, vn.find(' '));
-			//	const char* f = faceData.c_str();
-			//	vn = vn.substr(vn.find(' ') + 1);
+			for (int i = 0; i < 3; i++) {
+				std::string tmp;
+				tmp = f.substr(0, f.find(' '));
+				f = f.substr(f.find(' ') + 1);
+				if (i == 0) {
+					indicesData = tmp.c_str();
+				}
+				if (i == 1) {
+					normIndicesData = tmp.c_str();
+				}
+				if (i == 2) {
+					textIndicesData = tmp.c_str();
+				}
+			}
+			//indices data
+			for (int i = 0; i < 3; i++) {
+				std::string tmp;
+				tmp = indicesData.substr(0, indicesData.find('/'));
+				indicesData = indicesData.substr(indicesData.find('/') + 1);
+				if (i == 0) {
+					a = atof(tmp.c_str());
+				}
+				if (i == 1) {
+					b = atof(tmp.c_str());
+				}
+				if (i == 2) {
+					c = atof(tmp.c_str());
+				}
+			}
 
-			//}	
-			//a--; b--; c--;
-			//aT--; bT--; cT--;
-			//aN--; bN--; cN--;
+			//normal data
+			for (int i = 0; i < 3; i++) {
+				std::string tmp;
+				tmp = normIndicesData.substr(0, normIndicesData.find('/'));
+				normIndicesData = normIndicesData.substr(normIndicesData.find('/') + 1);
+				if (i == 0) {
+					aN = atof(tmp.c_str());
+				}
+				if (i == 1) {
+					bN = atof(tmp.c_str());
+				}
+				if (i == 2) {
+					cN = atof(tmp.c_str());
+				}
+			}
+			//texture data
+			for (int i = 0; i < 3; i++) {
+				std::string tmp;
+				tmp = textIndicesData.substr(0, textIndicesData.find('/'));
+				textIndicesData = textIndicesData.substr(textIndicesData.find('/') + 1);
+				if (i == 0) {
+					aT = atof(tmp.c_str());
+				}
+				if (i == 1) {
+					bT = atof(tmp.c_str());
+				}
+				if (i == 2) {
+					cT = atof(tmp.c_str());
+				}
+			}
 
-			//indices.push_back(a);
-			//indices.push_back(b);
-			//indices.push_back(c);
+			vertexIndices.push_back(a);
+			vertexIndices.push_back(b);
+			vertexIndices.push_back(c);
 
-			//normalIndices.push_back(aN);
-			//normalIndices.push_back(bN);
-			//normalIndices.push_back(cN);
+			normalIndices.push_back(aN);
+			normalIndices.push_back(bN);
+			normalIndices.push_back(cN);
 
-			//textureIndices.push_back(aT);
-			//textureIndices.push_back(bT);
-			//textureIndices.push_back(cT);
+			uvIndices.push_back(aT);
+			uvIndices.push_back(bT);
+			uvIndices.push_back(cT);
 		}
 
 		//NEW MESH
 		else if (line.substr(0, 7) == "usemtl ")
 		{
-			//if (indices.size() > 0)
-			//{
-			//    PostProcessing();
-			//}
-			//LoadMaterial(line.substr(7));
-		//}
+			if (vertexIndices.size() > 0)
+			{
+			    PostProcessing();
+			}
+			
 		}
-
 		//currentMaterial = Material();
 	}
 }
@@ -171,12 +222,11 @@ void Draw()
 	glEnableClientState(GL_COLOR_ARRAY);
 
 	glFrontFace(GL_CW);
-	//glVertexPointer(3, GL_FLOAT, 0, vertices);
+	glVertexPointer(3, GL_FLOAT, 0, &out_vertices);
 	//glColorPointer(4, GL_FIXED, 0, colors);
-	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, indices);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, &out_vertices);
 }
-
-void Postprocessing()
+void PostProcessing()
 {
 	for (unsigned int i = 0; i < vertexIndices.size(); i++) {
 		unsigned int vertexIndex = vertexIndices[i];
@@ -235,7 +285,7 @@ void on_draw_frame() {
 	glEnableClientState(GL_COLOR_ARRAY);
 
 	glFrontFace(GL_CW);
-	glVertexPointer(3, GL_FLOAT, 0, &temp_vertices[0]);
+	glVertexPointer(3, GL_FLOAT, 0, &out_vertices[0]);
 	//glColorPointer(4, GL_FIXED, 0, colors);
-	glDrawElements(GL_TRIANGLES, vertexIndices.size(), GL_UNSIGNED_BYTE, &vertexIndices[0]);
+	glDrawElements(GL_TRIANGLES, out_vertices.size(), GL_UNSIGNED_BYTE, &out_vertices[0]);
 }
