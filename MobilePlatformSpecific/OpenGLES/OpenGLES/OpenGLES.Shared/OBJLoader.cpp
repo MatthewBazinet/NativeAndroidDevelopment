@@ -26,77 +26,129 @@ std::vector< vec3 > temp_vertices;
 std::vector< vec3 > out_vertices;
 std::vector< vec2 > temp_uvs, out_uvs;
 std::vector< vec3 > temp_normals, out_normals;
+
 //FileData file;
 static AAssetManager* asset_manager;
 
 void LoadObj(const char* objFilePath_, AAssetManager* assetManager)
 {
+	std::string e;
+	std::string line;
 
 	const FileData file = get_asset_data(objFilePath_, assetManager);
-	
+	const char* f = reinterpret_cast<const char*>(const_cast<void*>(file.data));
+	e = std::string(f);
 
-	//currentmaterial = material();
+	while (e.find('\n') != std::string::npos) {
+		// Get the next occurrence from the current position
+		line = e.substr(0, e.find('\n'));
+		e = e.substr(e.find('\n') + 1);
 
-	//while (1)
-	//{
-	//	char lineheader[128];
-	//	 //read the first word of the line
-	//	int res = fscanf(file, "%s", lineheader);
-	//	if (res == eof)
-	//		break;
-	//	if (strcmp(lineheader, "v") == 0) {
-	//		vec3 vertex;
-	//		fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-	//		temp_vertices.push_back(vertex);
-	//	}
+		//VERTEX DATA
+		if (line.substr(0, 2) == "v ") {
+			std::string v(line.substr(2));
+			std::string vertexData;
+			std::vector<std::string> points;
+			float x, y, z;
+			while (v.find(' ') != std::string::npos) {
+				vertexData = v.substr(0, v.find(' '));
+				v = v.substr(v.find(' ') + 1);
+				points.push_back(v);
+				if (points.size() == 3) {
+					x = atof(points[0].c_str());
+					y = atof(points[1].c_str());
+					z = atof(points[2].c_str());
+					temp_vertices.push_back(vec3(x, y, z));
+					points.clear();
+				}
+			}
+		}
 
-	//	normal data
-	//	else if (strcmp(lineheader, "vn") == 0)
-	//	{
-	//		vec3 normal;
-	//		fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
-	//		temp_normals.push_back(normal);
-	//	}
+		//NORMAL DATA
+		else if (line.substr(0, 3) == "vn ")
+		{
+			std::string n(line.substr(3));
+			std::string normalData;
+			std::vector<std::string> points;
+			float x, y, z;
+			while (n.find(' ') != std::string::npos) {
+				normalData = n.substr(0, n.find(' '));
+				n = n.substr(n.find(' ') + 1);
+				points.push_back(n);
+				if (points.size() == 3) {
+					x = atof(points[0].c_str());
+					y = atof(points[1].c_str());
+					z = atof(points[2].c_str());
+					temp_normals.push_back(vec3(x, y, z));
+					points.clear();
+				}
+			}
+		}
+		//TEXTURE COORDINATES
+		else if (line.substr(0, 3) == "vt ")
+		{
+			std::string t(line.substr(3));
+			std::string textureCoord;
+			std::vector<std::string> points;
+			float x, y, z;
+			while (t.find(' ') != std::string::npos) {
+				textureCoord = t.substr(0, t.find(' '));
+				t = t.substr(t.find(' ') + 1);
+				points.push_back(t);
+				if (points.size() == 3) {
+					x = atof(points[0].c_str());
+					y = atof(points[1].c_str());
+					z = atof(points[2].c_str());
+					temp_uvs.push_back(vec2(x, y));
+					points.clear();
+				}
+			}
+		}
+		//FACE DATA
+		else if (line.substr(0, 2) == "f ")
+		{
+			std::string vn(line.substr(2));
+			std::string faceData;
+			//unsigned int a, b, c, aT, bT, cT, aN, bN, cN;
 
-	//	texture coordinates
-	//	else if (strcmp(lineheader, "vt") == 0)
-	//	{
-	//		vec2 textcoords;
-	//		fscanf(file, "%f %f %f\n", &textcoords.x, &textcoords.y);
-	//		temp_uvs.push_back(textcoords);
-	//	}
-	//	face data
-	//	else if (strcmp(lineheader, "f") == 0)
-	//	{
-	//		std::string vertex1, vertex2, vertex3;
-	//		unsigned int vertexindex[3], uvindex[3], normalindex[3];
-	//		int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexindex[0], &uvindex[0], &normalindex[0], &vertexindex[1], &uvindex[1], &normalindex[1], &vertexindex[2], &uvindex[2], &normalindex[2]);
-	//		if (matches != 9) {
-	//			printf("file can't be read by our simple parser : ( try exporting with other options\n");
-	//			return;
-	//		}
-	//		vertexindices.push_back(vertexindex[0]);
-	//		vertexindices.push_back(vertexindex[1]);
-	//		vertexindices.push_back(vertexindex[2]);
-	//		uvindices.push_back(uvindex[0]);
-	//		uvindices.push_back(uvindex[1]);
-	//		uvindices.push_back(uvindex[2]);
-	//		normalindices.push_back(normalindex[0]);
-	//		normalindices.push_back(normalindex[1]);
-	//		normalindices.push_back(normalindex[2]);
-	//	}
+			//vn >> a >> dummy >> aT >> dummy >> aN >> b >> dummy >> bT >> dummy >> bN
+			//	>> c >> dummy >> cT >> dummy >> cN;
+			//while (vn.find(' ') != std::string::npos) {
+			//	faceData = vn.substr(0, vn.find(' '));
+			//	const char* f = faceData.c_str();
+			//	vn = vn.substr(vn.find(' ') + 1);
 
-	//	new mesh
-	//	else if (strcmp(lineheader, "usemtl") == 0)
-	//	{
-	//		if (vertexindices.size() > 0 && uvindices.size() > 0 && normalindices.size() > 0)
-	//		{
+			//}	
+			//a--; b--; c--;
+			//aT--; bT--; cT--;
+			//aN--; bN--; cN--;
 
-	//			postprocessing();
-	//		}
-	//		loadmaterial(line.substr(7));
-	//	}
-	//}
+			//indices.push_back(a);
+			//indices.push_back(b);
+			//indices.push_back(c);
+
+			//normalIndices.push_back(aN);
+			//normalIndices.push_back(bN);
+			//normalIndices.push_back(cN);
+
+			//textureIndices.push_back(aT);
+			//textureIndices.push_back(bT);
+			//textureIndices.push_back(cT);
+		}
+
+		//NEW MESH
+		else if (line.substr(0, 7) == "usemtl ")
+		{
+			//if (indices.size() > 0)
+			//{
+			//    PostProcessing();
+			//}
+			//LoadMaterial(line.substr(7));
+		//}
+		}
+
+		//currentMaterial = Material();
+	}
 }
 
 void PrepareObj()
@@ -166,22 +218,24 @@ void on_surface_created() {
 }
 
 void on_surface_changed() {
-	buffer = create_vbo(sizeof(rect), rect, GL_STATIC_DRAW);
+	//buffer = create_vbo(sizeof(temp_vertices), &temp_vertices, GL_STATIC_DRAW);
 	//program = build_program_from_assets("shaders/shader.vsh", "shaders/shader.fsh");
 	//a_position_location = glGetAttribLocation(program, "a_Position");
 }
 
 void on_draw_frame() {
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glUseProgram(program);
-	//glUniform1i(u_texture_unit_location, 0);
-	//glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	//glVertexAttribPointer(a_position_location, 2, GL_FLOAT, GL_FALSE,
-	//	4 * sizeof(GL_FLOAT), BUFFER_OFFSET(0));
-	//glVertexAttribPointer(a_texture_coordinates_location, 2, GL_FLOAT, GL_FALSE,
-	//	4 * sizeof(GL_FLOAT), BUFFER_OFFSET(2 * sizeof(GL_FLOAT)));
-	//glEnableVertexAttribArray(a_position_location);
-	//glEnableVertexAttribArray(a_texture_coordinates_location);
-	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(0, 0, -3.0f);
+	//glRotatef(_rotation * 0.25f, 1, 0, 0);  // X
+	//glRotatef(_rotation, 0, 1, 0);          // Y
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glFrontFace(GL_CW);
+	glVertexPointer(3, GL_FLOAT, 0, &temp_vertices[0]);
+	//glColorPointer(4, GL_FIXED, 0, colors);
+	glDrawElements(GL_TRIANGLES, vertexIndices.size(), GL_UNSIGNED_BYTE, &vertexIndices[0]);
 }
