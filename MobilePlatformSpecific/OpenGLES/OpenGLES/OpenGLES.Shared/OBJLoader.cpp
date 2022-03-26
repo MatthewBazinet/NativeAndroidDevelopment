@@ -57,13 +57,11 @@ void LoadObj(const char* objFilePath_, AAssetManager* assetManager)
 				v = v.substr(v.find(' ') + 1);
 				if (i == 0) {
 					const char* g = vertexData.c_str();
-					float tempFloat = atof(v.c_str());
-					float tempFloat2 = atof(vertexData.c_str());
-					x = atof(vertexData.c_str());
+					x = atof(v.c_str());
 				}
 				if (i == 1) {
 					float tempFloat = atof(vertexData.c_str());
-					y = atof(vertexData.c_str());
+					y = atof(v.c_str());
 				}
 				if(i == 2)
 				{
@@ -143,7 +141,7 @@ void LoadObj(const char* objFilePath_, AAssetManager* assetManager)
 				tmp = indicesData.substr(0, indicesData.find('/'));
 				indicesData = indicesData.substr(indicesData.find('/') + 1);
 				if (i == 0) {
-					vertexIndices.push_back(atoi(tmp.c_str()));
+					vertexIndices.push_back(atoi(tmp.c_str()) - 1);
 				}
 				if (i == 1) {
 					normalIndices.push_back(atoi(tmp.c_str()));
@@ -157,7 +155,7 @@ void LoadObj(const char* objFilePath_, AAssetManager* assetManager)
 				tmp = secondIndicesData.substr(0, secondIndicesData.find('/'));
 				secondIndicesData = secondIndicesData.substr(secondIndicesData.find('/') + 1);
 				if (i == 0) {
-					vertexIndices.push_back(atoi(tmp.c_str()));
+					vertexIndices.push_back(atoi(tmp.c_str()) - 1);
 				}
 				if (i == 1) {
 					normalIndices.push_back(atoi(tmp.c_str()));
@@ -170,8 +168,9 @@ void LoadObj(const char* objFilePath_, AAssetManager* assetManager)
 				tmp = thirdIndicesData.substr(0, thirdIndicesData.find('/'));
 				thirdIndicesData = thirdIndicesData.substr(thirdIndicesData.find('/') + 1);
 				if (i == 0) {
-					GLubyte tmpFloat = atoi(tmp.c_str());
-					vertexIndices.push_back(tmpFloat);
+					GLubyte q = atoi(tmp.c_str());
+					GLubyte w = atoi(indicesData.c_str());
+					vertexIndices.push_back(atoi(tmp.c_str()) - 1);
 				}
 				if (i == 1) {
 					normalIndices.push_back(atoi(tmp.c_str()));
@@ -214,7 +213,7 @@ void OBJ_Draw()
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
-
+	
 	glFrontFace(GL_CW);
 	glVertexPointer(3, GL_FLOAT, 0, &temp_vertices[0]);
 	glColorPointer(4, GL_FLOAT, 0, &colours[0]);

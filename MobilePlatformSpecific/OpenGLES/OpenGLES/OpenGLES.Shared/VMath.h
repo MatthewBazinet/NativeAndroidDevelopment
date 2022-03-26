@@ -2,10 +2,10 @@
 
 struct vec4
 {
-    float x;
-    float y;
-    float z;
-    float w;
+    GLfloat x;
+    GLfloat y;
+    GLfloat z;
+    GLfloat w;
 
     vec4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) { }
     vec4(float X, float Y, float Z, float W) : x(X), y(Y), z(Z), w(W) { }
@@ -27,9 +27,9 @@ struct vec4
 
 struct vec3
 {
-    float x;
-    float y;
-    float z;
+    GLfloat x;
+    GLfloat y;
+    GLfloat z;
 
     vec3() : x(0.0f), y(0.0f), z(0.0f) { }
     vec3(float X, float Y, float Z) : x(X), y(Y), z(Z) { }
@@ -51,8 +51,8 @@ struct vec3
 
  struct vec2
  {
-     float x;
-     float y;
+     GLfloat x;
+     GLfloat y;
 
      vec2() : x(0.0f), y(0.0f) { }
      vec2(float X, float Y) : x(X), y(Y) { }
