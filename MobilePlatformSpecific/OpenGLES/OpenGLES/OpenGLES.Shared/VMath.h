@@ -1,4 +1,30 @@
 #pragma once
+
+struct vec4
+{
+    float x;
+    float y;
+    float z;
+    float w;
+
+    vec4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) { }
+    vec4(float X, float Y, float Z, float W) : x(X), y(Y), z(Z), w(W) { }
+    explicit vec4(float S) : x(S), y(S), z(S), w(S) { }
+    vec4 operator - () const { return vec4(-x, -y, -z, -w); }
+    vec4 operator + (const vec4& rhs) const { return vec4(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w); }
+    vec4 operator * (const vec4& rhs) const { return vec4(x * rhs.x, y * rhs.y, z * rhs.z, w * rhs.w); }
+    vec4 operator - (const vec4& rhs) const { return vec4(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w); }
+    vec4 operator * (const float s)  const { return vec4(x * s, y * s, z * s, w * s); }
+    vec4 operator / (const float s)  const { return vec4(x / s, y / s, z / s, w / s); }
+
+    vec4& operator += (const vec4& rhs) { *this = *this + rhs; return *this; }
+    vec4& operator *= (const vec4& rhs) { *this = *this * rhs; return *this; }
+    vec4& operator -= (const vec4& rhs) { *this = *this - rhs; return *this; }
+
+    float& operator [] (unsigned int i) { return (&x)[i]; }
+    const float& operator [] (unsigned int i) const { return (&x)[i]; }
+};
+
 struct vec3
 {
     float x;

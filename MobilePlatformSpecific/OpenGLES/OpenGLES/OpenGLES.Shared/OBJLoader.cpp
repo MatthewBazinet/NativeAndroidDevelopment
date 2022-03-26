@@ -15,17 +15,20 @@ static GLint a_position_location;
 static GLint a_texture_coordinates_location;
 static GLint u_texture_unit_location;
 
+float rotation;
+
 // position X, Y, texture S, T
 static const float rect[] = { -1.0f, -1.0f, 0.0f, 0.0f,
 							 -1.0f,  1.0f, 0.0f, 1.0f,
 							  1.0f, -1.0f, 1.0f, 0.0f,
 							  1.0f,  1.0f, 1.0f, 1.0f };
 
-std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
-std::vector< vec3 > temp_vertices;
-std::vector< vec3 > out_vertices;
-std::vector< vec2 > temp_uvs, out_uvs;
-std::vector< vec3 > temp_normals, out_normals;
+static std::vector< GLubyte > vertexIndices = std::vector< GLubyte >(), uvIndices = std::vector< GLubyte >(), normalIndices = std::vector< GLubyte >();
+static std::vector< vec3 > temp_vertices = std::vector< vec3 >();
+static std::vector< vec3 > out_vertices = std::vector< vec3 >();
+static std::vector< vec2 > temp_uvs = std::vector< vec2 >(), out_uvs = std::vector< vec2 >();
+static std::vector< vec3 > temp_normals = std::vector< vec3 >(), out_normals = std::vector< vec3 >();
+static std::vector< vec4 > colours = std::vector< vec4 >();
 
 //FileData file;
 static AAssetManager* asset_manager;
@@ -53,16 +56,23 @@ void LoadObj(const char* objFilePath_, AAssetManager* assetManager)
 				vertexData = v.substr(0, v.find(' '));
 				v = v.substr(v.find(' ') + 1);
 				if (i == 0) {
+					const char* g = vertexData.c_str();
+					float tempFloat = atof(v.c_str());
+					float tempFloat2 = atof(vertexData.c_str());
 					x = atof(vertexData.c_str());
 				}
 				if (i == 1) {
+					float tempFloat = atof(vertexData.c_str());
 					y = atof(vertexData.c_str());
 				}
-				if (i == 2) {
-					z = atof(vertexData.c_str());
+				if(i == 2)
+				{
+					z = atof(v.c_str());
 				}
+				
 			}
 				temp_vertices.push_back(vec3(x, y, z));
+				colours.push_back(vec4(1.0f, 1.0f, 1.0f, 0.0f));
 		}
 
 		//NORMAL DATA
@@ -112,10 +122,10 @@ void LoadObj(const char* objFilePath_, AAssetManager* assetManager)
 		{
 			std::string f(line.substr(2));
 			std::string faceData;
-			std::string indicesData, normIndicesData, textIndicesData;
+			std::string indicesData, secondIndicesData, thirdIndicesData;
 			unsigned int a, b, c, aT, bT, cT, aN, bN, cN;
 
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < 2; i++) {
 				std::string tmp;
 				tmp = f.substr(0, f.find(' '));
 				f = f.substr(f.find(' ') + 1);
@@ -123,70 +133,51 @@ void LoadObj(const char* objFilePath_, AAssetManager* assetManager)
 					indicesData = tmp.c_str();
 				}
 				if (i == 1) {
-					normIndicesData = tmp.c_str();
-				}
-				if (i == 2) {
-					textIndicesData = tmp.c_str();
+					secondIndicesData = tmp.c_str();
+					thirdIndicesData = f.c_str();
 				}
 			}
 			//indices data
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < 2; i++) {
 				std::string tmp;
 				tmp = indicesData.substr(0, indicesData.find('/'));
 				indicesData = indicesData.substr(indicesData.find('/') + 1);
 				if (i == 0) {
-					a = atof(tmp.c_str());
+					vertexIndices.push_back(atoi(tmp.c_str()));
 				}
 				if (i == 1) {
-					b = atof(tmp.c_str());
-				}
-				if (i == 2) {
-					c = atof(tmp.c_str());
+					normalIndices.push_back(atoi(tmp.c_str()));
+					uvIndices.push_back(atoi(indicesData.c_str()));
 				}
 			}
 
 			//normal data
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < 2; i++) {
 				std::string tmp;
-				tmp = normIndicesData.substr(0, normIndicesData.find('/'));
-				normIndicesData = normIndicesData.substr(normIndicesData.find('/') + 1);
+				tmp = secondIndicesData.substr(0, secondIndicesData.find('/'));
+				secondIndicesData = secondIndicesData.substr(secondIndicesData.find('/') + 1);
 				if (i == 0) {
-					aN = atof(tmp.c_str());
+					vertexIndices.push_back(atoi(tmp.c_str()));
 				}
 				if (i == 1) {
-					bN = atof(tmp.c_str());
-				}
-				if (i == 2) {
-					cN = atof(tmp.c_str());
+					normalIndices.push_back(atoi(tmp.c_str()));
+					uvIndices.push_back(atoi(secondIndicesData.c_str()));
 				}
 			}
 			//texture data
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < 2; i++) {
 				std::string tmp;
-				tmp = textIndicesData.substr(0, textIndicesData.find('/'));
-				textIndicesData = textIndicesData.substr(textIndicesData.find('/') + 1);
+				tmp = thirdIndicesData.substr(0, thirdIndicesData.find('/'));
+				thirdIndicesData = thirdIndicesData.substr(thirdIndicesData.find('/') + 1);
 				if (i == 0) {
-					aT = atof(tmp.c_str());
+					GLubyte tmpFloat = atoi(tmp.c_str());
+					vertexIndices.push_back(tmpFloat);
 				}
 				if (i == 1) {
-					bT = atof(tmp.c_str());
-				}
-				if (i == 2) {
-					cT = atof(tmp.c_str());
+					normalIndices.push_back(atoi(tmp.c_str()));
+					uvIndices.push_back(atoi(thirdIndicesData.c_str()));
 				}
 			}
-
-			vertexIndices.push_back(a);
-			vertexIndices.push_back(b);
-			vertexIndices.push_back(c);
-
-			normalIndices.push_back(aN);
-			normalIndices.push_back(bN);
-			normalIndices.push_back(cN);
-
-			uvIndices.push_back(aT);
-			uvIndices.push_back(bT);
-			uvIndices.push_back(cT);
 		}
 
 		//NEW MESH
@@ -207,24 +198,27 @@ void PrepareObj()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Update()
+void OBJUpdate()
 {
-
+	rotation++;
 }
 
-void Draw()
+void OBJ_Draw()
 {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glTranslatef(0, 0, -3.0f);
+	glRotatef(rotation * 0.25f, 1, 0, 0);  // X
+	glRotatef(rotation, 0, 1, 0);          // Y
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
+
 	glFrontFace(GL_CW);
-	glVertexPointer(3, GL_FLOAT, 0, &out_vertices);
-	//glColorPointer(4, GL_FIXED, 0, colors);
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, &out_vertices);
+	glVertexPointer(3, GL_FLOAT, 0, &temp_vertices[0]);
+	glColorPointer(4, GL_FLOAT, 0, &colours[0]);
+	glDrawElements(GL_TRIANGLES, vertexIndices.size(), GL_UNSIGNED_BYTE, &vertexIndices[0]);
 }
 void PostProcessing()
 {
@@ -274,18 +268,15 @@ void on_surface_changed() {
 }
 
 void on_draw_frame() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glTranslatef(0, 0, -3.0f);
-	//glRotatef(_rotation * 0.25f, 1, 0, 0);  // X
-	//glRotatef(_rotation, 0, 1, 0);          // Y
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
 	glFrontFace(GL_CW);
-	glVertexPointer(3, GL_FLOAT, 0, &out_vertices[0]);
-	//glColorPointer(4, GL_FIXED, 0, colors);
-	glDrawElements(GL_TRIANGLES, out_vertices.size(), GL_UNSIGNED_BYTE, &out_vertices[0]);
+	glVertexPointer(3, GL_FLOAT, 0, &temp_vertices[0]);
+	glColorPointer(4, GL_FLOAT, 0, &colours[0]);
+	glDrawElements(GL_TRIANGLES, temp_vertices.size(), GL_UNSIGNED_SHORT, &vertexIndices[0]);
 }

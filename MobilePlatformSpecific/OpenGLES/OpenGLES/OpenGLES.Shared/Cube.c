@@ -81,5 +81,5 @@ void Cube_draw()
     glFrontFace(GL_CW);
     glVertexPointer(3, GL_FLOAT, 0, vertices);
     glColorPointer(4, GL_FIXED, 0, colors);
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, indices);
+    glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLubyte), GL_UNSIGNED_BYTE, indices);
 }

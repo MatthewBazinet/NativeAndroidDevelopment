@@ -23,8 +23,8 @@
 void SetupOBJ(double width, double height);
 void LoadObj(const char* objFilePath_, AAssetManager* assetManager);
 void PrepareObj();
-void Update();
-void Draw();
+void OBJUpdate();
+void OBJ_Draw();
 void PostProcessing();
 
 void on_surface_created();

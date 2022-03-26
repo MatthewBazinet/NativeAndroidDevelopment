@@ -130,7 +130,9 @@ static void engine_draw_frame(struct engine* engine) {
 
 	//Sphere_prepare();
 	//Cube_prepare();
-	Draw();
+	PrepareObj();
+	OBJUpdate();
+	OBJ_Draw();
 	//on_draw_frame();
 	//Cube_draw();
 
