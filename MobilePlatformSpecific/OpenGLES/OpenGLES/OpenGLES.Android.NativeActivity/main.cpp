@@ -113,9 +113,9 @@ static int engine_init_display(struct engine* engine) {
 	// Initialize GL state.
 	//Sphere_setupGL(w, h);
 	SetupOBJ(w, h);
-	LoadObj("Dice.txt", engine->app->activity->assetManager);
 	glEnable(GL_LIGHTING);
-	//LoadObj("Sphere.txt", engine->app->activity->assetManager);
+	//LoadObj("Dice.txt", engine->app->activity->assetManager);
+	LoadObj("Sphere.txt", engine->app->activity->assetManager);
 	return 0;
 }
 
