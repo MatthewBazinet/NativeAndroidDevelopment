@@ -113,8 +113,9 @@ static int engine_init_display(struct engine* engine) {
 	// Initialize GL state.
 	//Sphere_setupGL(w, h);
 	SetupOBJ(w, h);
-
 	LoadObj("Dice.txt", engine->app->activity->assetManager);
+	glEnable(GL_LIGHTING);
+	//LoadObj("Sphere.txt", engine->app->activity->assetManager);
 	return 0;
 }
 
@@ -131,8 +132,19 @@ static void engine_draw_frame(struct engine* engine) {
 	//Sphere_prepare();
 	//Cube_prepare();
 	PrepareObj();
+	float ambient[] = { 0.5f, 0.5f, 0.5f, 1 };
+	float diffuse[] = { 1.0f, 1.0f, 1.0f, 1 };
+	float position[] = { 0, 0, 5, 1 };
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glEnable(GL_LIGHT1);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, ambient);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, diffuse);
+	glLightfv(GL_LIGHT1, GL_POSITION, position);
 	OBJUpdate();
 	OBJ_Draw();
+	
 	//on_draw_frame();
 	//Cube_draw();
 

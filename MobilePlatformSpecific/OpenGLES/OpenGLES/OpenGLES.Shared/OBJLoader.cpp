@@ -212,11 +212,11 @@ void OBJ_Draw()
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
-
 	
 	glFrontFace(GL_CW);
 	glVertexPointer(3, GL_FLOAT, 0, &temp_vertices[0]);
 	glColorPointer(4, GL_FLOAT, 0, &colours[0]);
+
 	glDrawElements(GL_TRIANGLES, vertexIndices.size(), GL_UNSIGNED_BYTE, &vertexIndices[0]);
 }
 void PostProcessing()
