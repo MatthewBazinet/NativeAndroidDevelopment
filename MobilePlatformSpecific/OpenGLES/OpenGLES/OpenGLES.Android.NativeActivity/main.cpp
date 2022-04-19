@@ -293,6 +293,10 @@ void android_main(struct android_app* state) {
 						LOGI("accelerometer: x=%f y=%f z=%f",
 							event.acceleration.x, event.acceleration.y,
 							event.acceleration.z);
+						if (event.acceleration.y > 1.0f)
+						{
+							OBJUpdate();
+						}
 					}
 				}
 			}
